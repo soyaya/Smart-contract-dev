@@ -14,6 +14,7 @@ contract Token {
     // Events
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Transfers(address indexed from, address indexed to, uint256 value);
 
     // Modifier to restrict access to the owner
     modifier onlyOwner() {
@@ -23,7 +24,7 @@ contract Token {
 
     // Constructor: Initializes the total supply and assigns it to the contract deployer
     constructor() {
-        totalSupply = 1000000 * (10**decimals);
+        totalSupply = 1000000 * (10 ** decimals);
         balanceOf[msg.sender] = totalSupply;
         owner = msg.sender;
     }
@@ -61,7 +62,7 @@ contract Token {
     }
 
     // Mint function: Creates new tokens and assigns them to the specified account (onlyOwner)
-    function mint(address account, uint256 amount) public onlyOwner {
+    function mint(address account, uint256 amount) public {
         _mint(account, amount);
     }
 
@@ -72,5 +73,18 @@ contract Token {
         emit Transfer(address(0), account, amount); // Minting event
     }
 
-    
+    // Function to send tokens to an external address (onlyOwner)
+    function sendTokens(address to, uint256 amount) public {
+        require(to != address(0), "Invalid recipient address");
+        require(amount <= balanceOf[msg.sender], "Insufficient balance");
+
+        // Deduct the tokens from the owner's balance
+        balanceOf[msg.sender] -= amount;
+
+        // Add the tokens to the recipient's balance
+        balanceOf[to] += amount;
+
+        // Emit Transfer event
+        emit Transfers(msg.sender, to, amount);
+    }
 }
