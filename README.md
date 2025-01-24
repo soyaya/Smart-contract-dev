@@ -1,4 +1,4 @@
-TOOLS FOR CONTRACT AUDINTING 
+TOOLS FOR CONTRACT AUDINTING.
 
 https://github.com/shanzson/Smart-Contract-Auditor-Tools-and-Techniques
 
